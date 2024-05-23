@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const pdf = require('pdf-parse');
 const fs = require('fs');
 const cors = require('cors');
+require('dotenv').config();
 
-const serviceAccount = require('./wordlearningapp-b4360-firebase-adminsdk-tvj6y-82e3ae1618.json');
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
