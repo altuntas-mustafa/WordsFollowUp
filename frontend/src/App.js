@@ -1,8 +1,7 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { auth } from './firebase';
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { firestore } from './firebase';
 import Navbar from './components/Navbar';
 import LearnWords from './components/LearnWords';
 import KnownWords from './components/KnownWords';
@@ -17,9 +16,8 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
-        const wordsRef = collection(firestore, 'words');
-        const wordsSnapshot = await getDocs(wordsRef);
-        const wordsList = wordsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const response = await fetch('http://localhost:5000/api/words');
+        const wordsList = await response.json();
         setWords(wordsList.filter(word => !word.known));
         setKnownWords(wordsList.filter(word => word.known));
       } else {
@@ -30,8 +28,11 @@ function App() {
   }, []);
 
   const handleKnownClick = async (word) => {
-    const wordDoc = doc(firestore, 'words', word.id);
-    await updateDoc(wordDoc, { known: true });
+    await fetch('http://localhost:5000/api/words/known', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: word.id })
+    });
     setKnownWords([...knownWords, word]);
     setWords(words.filter(w => w.id !== word.id));
   };
