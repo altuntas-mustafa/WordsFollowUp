@@ -1,33 +1,78 @@
 /* src/components/Navbar.css */
 .navbar {
-    background-color: #333;
-    padding: 1rem;
+  background-color: #333;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navbar-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 0 1rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+}
+
+.hamburger-menu {
+  font-size: 2rem;
+  cursor: pointer;
+  display: block;
+}
+
+.navbar-list {
+  list-style-type: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+.navbar-list.open {
+  display: flex;
+}
+
+.navbar-item {
+  color: white;
+  margin: 0.5rem 0;
+}
+
+.navbar-item a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-item button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.navbar-item button:hover,
+.navbar-item a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 600px) {
+  .navbar-header {
+    display: none;
   }
-  
+
   .navbar-list {
-    list-style-type: none;
+    flex-direction: row;
     display: flex;
-    justify-content: space-around;
   }
-  
+
   .navbar-item {
-    color: white;
+    margin: 0 1rem;
   }
-  
-  .navbar-item a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .navbar-item button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .navbar-item button:hover,
-  .navbar-item a:hover {
-    text-decoration: underline;
-  }
-  
+}
