@@ -1,15 +1,72 @@
 /* src/components/Home.css */
 .home-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .home-container h1 {
-    color: #333;
-  }
-  
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.5em; /* Increased font size */
+}
+
+.home-container h1,
+.home-container h2 {
+  text-align: center;
+  color: #333;
+}
+
+.home-container p {
+  text-align: center;
+  color: #666;
+}
+
+.home-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.home-container a:hover {
+  text-decoration: underline;
+}
+
+.words-list {
+  list-style: none;
+  padding: 0;
+}
+
+.word-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.word-section {
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.dutch {
+  color: #007bff;
+}
+
+.turkish {
+  color: #d9534f;
+}
+
+.loading,
+.error {
+  text-align: center;
+  color: #999;
+}
+
+.no-words {
+  text-align: center;
+  color: #666;
+}
