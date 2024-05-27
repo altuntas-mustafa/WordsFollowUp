@@ -1,0 +1,41 @@
+/* src/components/YourWordList.css */
+.your-word-list-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .your-word-list-container h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .your-word-list-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .your-word-list-container li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .your-word-list-container li:nth-child(odd) {
+    background-color: #f1f1f1;
+  }
+  
+  .no-words {
+    text-align: center;
+    color: #666;
+  }
+  

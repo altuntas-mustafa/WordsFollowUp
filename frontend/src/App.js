@@ -1,53 +1,43 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import Navbar from './components/Navbar';
-import LearnWords from './components/LearnWords';
-import KnownWords from './components/KnownWords';
 import Login from './components/Login';
+import Home from './components/Home';
+import YourWordList from './components/YourWordList';
+import WordToLearn from './components/WordToLearn';
+import { setUser, selectUser } from './features/userSlice';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [words, setWords] = useState([]);
-  const [knownWords, setKnownWords] = useState([]);
+  const dispatch = useDispatch();
+  const userEmail = useSelector(selectUser);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
-        const response = await fetch('http://localhost:5000/api/words');
-        const wordsList = await response.json();
-        setWords(wordsList.filter(word => !word.known));
-        setKnownWords(wordsList.filter(word => word.known));
+        dispatch(setUser(user.email));
       } else {
-        setUser(null);
+        dispatch(setUser(null));
       }
     });
+
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
-  const handleKnownClick = async (word) => {
-    await fetch('http://localhost:5000/api/words/known', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: word.id })
-    });
-    setKnownWords([...knownWords, word]);
-    setWords(words.filter(w => w.id !== word.id));
-  };
-
-  if (!user) {
+  if (!userEmail) {
     return <Login />;
   }
 
   return (
     <Router>
-      <Navbar user={user} />
+      <Navbar />
       <Routes>
-        <Route path="/learn" element={<LearnWords words={words} handleKnownClick={handleKnownClick} />} />
-        <Route path="/known" element={<KnownWords words={knownWords} />} />
-        <Route path="*" element={<Navigate to="/learn" />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/your-word-list" element={<YourWordList />} />
+        <Route path="/word-to-learn" element={<WordToLearn />} />
       </Routes>
     </Router>
   );

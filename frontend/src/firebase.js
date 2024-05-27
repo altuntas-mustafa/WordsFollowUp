@@ -1,6 +1,6 @@
 // src/firebase.js
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -13,11 +13,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
-export const firestore = getFirestore(app);
-
+const auth = getAuth(app);
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
-export const signOut = () => firebaseSignOut(auth);
+const signInWithGoogle = () => signInWithPopup(auth, provider);
+const signOutUser = () => signOut(auth);
+
+export { auth, signInWithGoogle, signOutUser, db };

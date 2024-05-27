@@ -1,21 +1,29 @@
 // src/components/Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { signOut } from '../firebase';
+import { useDispatch } from 'react-redux';
+import { signOutUser } from '../firebase';
+import { clearUser } from '../features/userSlice';
+import './Navbar.css';
 
-function Navbar({ user }) {
+const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const handleSignOut = () => {
+    signOutUser();
+    dispatch(clearUser());
+  };
+
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: '#f8f8f8', borderBottom: '1px solid #ccc' }}>
-      <div>
-        <Link to="/learn" style={{ marginRight: '20px' }}>Words to Learn</Link>
-        <Link to="/known">Known Words</Link>
-      </div>
-      <div>
-        <span>Welcome, {user.displayName}</span>
-        <button onClick={signOut} style={{ marginLeft: '20px', padding: '10px 20px', fontSize: '16px' }}>Sign Out</button>
-      </div>
+    <nav className="navbar">
+      <ul className="navbar-list">
+        <li className="navbar-item"><Link to="/">Home</Link></li>
+        <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
+        <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
+        <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
+      </ul>
     </nav>
   );
-}
+};
 
 export default Navbar;
