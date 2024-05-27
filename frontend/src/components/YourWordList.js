@@ -37,8 +37,31 @@ const YourWordList = () => {
       ) : (
         <ul>
           {learnedWords.map((word) => (
-            <li key={word.id}>
-              {word.Nederlands} - {word.Turks}
+            <li key={word.id} className="word-item">
+              <div className="word-section">
+                <span className="label">Dutch:</span>
+                <span className="dutch">{word.Nederlands}</span>
+              </div>
+              <div className="word-section">
+                <span className="label">Turkish:</span>
+                <span className="turkish">{word.Turks}</span>
+              </div>
+              <div className="word-section">
+                <span className="label">Hoe te lezen:</span>
+                <span className="dutch">{word.HoeTeLezen}</span>
+              </div>
+              <div className="word-section">
+                <span className="label">Okunuş:</span>
+                <span className="turkish">{word.Okunus}</span>
+              </div>
+              <div className="word-section">
+                <span className="label">Example sentence (Dutch):</span>
+                <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
+              </div>
+              <div className="word-section">
+                <span className="label">Example sentence (Turkish):</span>
+                <span className="turkish">{word.OrnekCumleTurkce}</span>
+              </div>
               <button onClick={() => handleUnknownClick(word.id)}>Don't Know</button>
             </li>
           ))}

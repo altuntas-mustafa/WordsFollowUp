@@ -1,60 +1,69 @@
 /* src/components/YourWordList.css */
 .your-word-list-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .your-word-list-container h1 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .your-word-list-container ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .your-word-list-container li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.5rem;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-  
-  .your-word-list-container li:nth-child(odd) {
-    background-color: #f1f1f1;
-  }
-  
-  .your-word-list-container button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .your-word-list-container button:hover {
-    background-color: #d32f2f;
-  }
-  
-  .no-words {
-    text-align: center;
-    color: #666;
-  }
-  
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.your-word-list-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.your-word-list-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.word-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.word-section {
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.dutch {
+  color: #007bff;
+}
+
+.turkish {
+  color: #d9534f;
+}
+
+.your-word-list-container button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin-top: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.your-word-list-container button:hover {
+  background-color: #d32f2f;
+}
+
+.no-words {
+  text-align: center;
+  color: #666;
+}
