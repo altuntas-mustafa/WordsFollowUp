@@ -15,6 +15,12 @@ export const markWordAsLearned = createAsyncThunk('words/markWordAsLearned', asy
   return { wordId, email };
 });
 
+export const markWordAsUnknown = createAsyncThunk('words/markWordAsUnknown', async ({ wordId }) => {
+  const wordRef = doc(db, 'words', wordId);
+  await updateDoc(wordRef, { learnedBy: '' });
+  return wordId;
+});
+
 const wordsSlice = createSlice({
   name: 'words',
   initialState: {
@@ -39,6 +45,13 @@ const wordsSlice = createSlice({
         const word = state.words.find(word => word.id === wordId);
         if (word) {
           word.learnedBy = email;
+        }
+      })
+      .addCase(markWordAsUnknown.fulfilled, (state, action) => {
+        const wordId = action.payload;
+        const word = state.words.find(word => word.id === wordId);
+        if (word) {
+          word.learnedBy = '';
         }
       });
   },
