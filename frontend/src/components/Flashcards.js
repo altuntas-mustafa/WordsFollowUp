@@ -8,6 +8,7 @@ const Flashcards = () => {
   const words = location.state?.words || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [direction, setDirection] = useState('dutch-to-turkish');
 
   const handleNext = () => {
     setIsFlipped(false);
@@ -18,44 +19,91 @@ const Flashcards = () => {
     setIsFlipped(!isFlipped);
   };
 
+  const handleDirectionChange = (event) => {
+    setDirection(event.target.value);
+    setIsFlipped(false);
+  };
+
   const currentWord = words[currentIndex];
 
   return (
     <div className="flashcards-container">
       <h1>Flashcards</h1>
+      <div className="direction-select">
+        <label htmlFor="direction">Select direction: </label>
+        <select id="direction" value={direction} onChange={handleDirectionChange}>
+          <option value="dutch-to-turkish">Dutch to Turkish</option>
+          <option value="turkish-to-dutch">Turkish to Dutch</option>
+        </select>
+      </div>
       {words.length === 0 ? (
         <p>No words available for flashcards</p>
       ) : (
         <div className="flashcard-container">
           <div className={`flashcard ${isFlipped ? 'is-flipped' : ''}`} onClick={handleFlip}>
-            <div className="flashcard-front">
-              <div className="word-section">
-                <span className="label">Dutch:</span>
-                <span className="dutch">{currentWord.Nederlands}</span>
-              </div>
-              <div className="word-section">
-                <span className="label">Hoe te lezen:</span>
-                <span className="dutch">{currentWord.HoeTeLezen}</span>
-              </div>
-              <div className="word-section">
-                <span className="label">Example sentence (Dutch):</span>
-                <span className="dutch">{currentWord.Voorbeeldzin_Nederlands}</span>
-              </div>
-            </div>
-            <div className="flashcard-back">
-              <div className="word-section">
-                <span className="label">Turkish:</span>
-                <span className="turkish">{currentWord.Turks}</span>
-              </div>
-              <div className="word-section">
-                <span className="label">Okunuş:</span>
-                <span className="turkish">{currentWord.Okunus}</span>
-              </div>
-              <div className="word-section">
-                <span className="label">Example sentence (Turkish):</span>
-                <span className="turkish">{currentWord.OrnekCumleTurkce}</span>
-              </div>
-            </div>
+            {direction === 'dutch-to-turkish' ? (
+              <>
+                <div className="flashcard-front">
+                  <div className="word-section">
+                    <span className="label">Dutch:</span>
+                    <span className="dutch">{currentWord.Nederlands}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Hoe te lezen:</span>
+                    <span className="dutch">{currentWord.HoeTeLezen}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Dutch):</span>
+                    <span className="dutch">{currentWord.Voorbeeldzin_Nederlands}</span>
+                  </div>
+                </div>
+                <div className="flashcard-back">
+                  <div className="word-section">
+                    <span className="label">Turkish:</span>
+                    <span className="turkish">{currentWord.Turks}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Okunuş:</span>
+                    <span className="turkish">{currentWord.Okunus}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Turkish):</span>
+                    <span className="turkish">{currentWord.OrnekCumleTurkce}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flashcard-front">
+                  <div className="word-section">
+                    <span className="label">Turkish:</span>
+                    <span className="turkish">{currentWord.Turks}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Okunuş:</span>
+                    <span className="turkish">{currentWord.Okunus}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Turkish):</span>
+                    <span className="turkish">{currentWord.OrnekCumleTurkce}</span>
+                  </div>
+                </div>
+                <div className="flashcard-back">
+                  <div className="word-section">
+                    <span className="label">Dutch:</span>
+                    <span className="dutch">{currentWord.Nederlands}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Hoe te lezen:</span>
+                    <span className="dutch">{currentWord.HoeTeLezen}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Dutch):</span>
+                    <span className="dutch">{currentWord.Voorbeeldzin_Nederlands}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <button onClick={handleNext} className="next-button">Next</button>
         </div>
