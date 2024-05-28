@@ -56,7 +56,7 @@ const Home = () => {
                   </div>
                   <div className="word-section">
                     <span className="label">Example sentence (Dutch):</span>
-                    <span className="dutch">{word.VoorbeeldzinNederlands}</span>
+                    <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
                   </div>
                   <div className="word-section">
                     <span className="label">Example sentence (Turkish):</span>
