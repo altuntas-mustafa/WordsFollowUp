@@ -1,41 +1,30 @@
 // src/components/YourWordList.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
 import { selectUser } from '../features/userSlice';
-import { markWordAsUnknown } from '../features/wordsSlice';
+import { fetchWords, markWordAsUnknown, selectLearnedWords } from '../features/wordsSlice';
 import './YourWordList.css';
 
 const YourWordList = () => {
   const dispatch = useDispatch();
   const email = useSelector(selectUser);
-  const [learnedWords, setLearnedWords] = useState([]);
-  const [totalWords, setTotalWords] = useState(0);
+  const learnedWords = useSelector((state) => selectLearnedWords(state, email));
+  const status = useSelector((state) => state.words.status);
 
   useEffect(() => {
-    if (email) {
-      const fetchLearnedWords = async () => {
-        const q = query(collection(db, 'words'), where('learnedBy', '==', email));
-        const querySnapshot = await getDocs(q);
-        const words = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setLearnedWords(words);
-        setTotalWords(words.length); // Update total words count
-      };
-      fetchLearnedWords();
-    }
-  }, [email]);
+    dispatch(fetchWords());
+  }, [dispatch]);
 
   const handleUnknownClick = (wordId) => {
-    dispatch(markWordAsUnknown({ wordId }));
-    setLearnedWords(learnedWords.filter(word => word.id !== wordId));
-    setTotalWords(totalWords - 1); // Update total words count
+    dispatch(markWordAsUnknown({ email, wordId }));
   };
 
   return (
     <div className="your-word-list-container">
       <h1>Your Word List</h1>
-      <p className="total-words">Total words learned: {totalWords}</p> {/* Display total words count */}
+      <p className="total-words">Total words learned: {learnedWords.length}</p> {/* Display total words count */}
+      {status === 'loading' && <p className="loading">Loading...</p>}
+      {status === 'failed' && <p className="error">Failed to load words.</p>}
       {learnedWords.length === 0 ? (
         <p className="no-words">No words learned yet</p>
       ) : (

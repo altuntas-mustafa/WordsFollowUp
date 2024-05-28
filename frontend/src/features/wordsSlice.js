@@ -1,7 +1,8 @@
 // src/features/wordsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { db } from '../firebase';
-import { collection, getDocs, updateDoc, doc, where, query } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { createSelector } from 'reselect';
 
 export const fetchWords = createAsyncThunk('words/fetchWords', async () => {
   const querySnapshot = await getDocs(collection(db, 'words'));
@@ -11,14 +12,14 @@ export const fetchWords = createAsyncThunk('words/fetchWords', async () => {
 
 export const markWordAsLearned = createAsyncThunk('words/markWordAsLearned', async ({ email, wordId }) => {
   const wordRef = doc(db, 'words', wordId);
-  await updateDoc(wordRef, { learnedBy: email });
+  await updateDoc(wordRef, { learnedBy: arrayUnion(email) });
   return { wordId, email };
 });
 
-export const markWordAsUnknown = createAsyncThunk('words/markWordAsUnknown', async ({ wordId }) => {
+export const markWordAsUnknown = createAsyncThunk('words/markWordAsUnknown', async ({ email, wordId }) => {
   const wordRef = doc(db, 'words', wordId);
-  await updateDoc(wordRef, { learnedBy: '' });
-  return wordId;
+  await updateDoc(wordRef, { learnedBy: arrayRemove(email) });
+  return { wordId, email };
 });
 
 const wordsSlice = createSlice({
@@ -44,23 +45,31 @@ const wordsSlice = createSlice({
         const { wordId, email } = action.payload;
         const word = state.words.find(word => word.id === wordId);
         if (word) {
-          word.learnedBy = email;
+          if (!word.learnedBy) {
+            word.learnedBy = [email];
+          } else if (!word.learnedBy.includes(email)) {
+            word.learnedBy.push(email);
+          }
         }
       })
       .addCase(markWordAsUnknown.fulfilled, (state, action) => {
-        const wordId = action.payload;
+        const { wordId, email } = action.payload;
         const word = state.words.find(word => word.id === wordId);
-        if (word) {
-          word.learnedBy = '';
+        if (word && word.learnedBy) {
+          word.learnedBy = word.learnedBy.filter(e => e !== email);
         }
       });
   },
 });
 
 export const selectWords = (state) => state.words.words;
-export const selectUnlearnedWords = (state, email) =>
-  state.words.words.filter(word => !word.learnedBy || word.learnedBy !== email);
-export const selectLearnedWords = (state, email) =>
-  state.words.words.filter(word => word.learnedBy === email);
+export const selectUnlearnedWords = createSelector(
+  [selectWords, (state, email) => email],
+  (words, email) => words.filter(word => !word.learnedBy || !word.learnedBy.includes(email))
+);
+export const selectLearnedWords = createSelector(
+  [selectWords, (state, email) => email],
+  (words, email) => words.filter(word => word.learnedBy && word.learnedBy.includes(email))
+);
 
 export default wordsSlice.reducer;
