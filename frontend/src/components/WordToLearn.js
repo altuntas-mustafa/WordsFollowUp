@@ -22,6 +22,7 @@ const WordToLearn = () => {
   return (
     <div className="words-to-learn-container">
       <h1>Words to Learn</h1>
+      <p className="total-words">Total words to learn: {words.length}</p> {/* Display total words count */}
       {status === 'loading' && <p className="loading">Loading...</p>}
       {status === 'failed' && <p className="error">Failed to load words.</p>}
       {status === 'success' && (

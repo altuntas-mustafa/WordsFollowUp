@@ -11,6 +11,7 @@ const YourWordList = () => {
   const dispatch = useDispatch();
   const email = useSelector(selectUser);
   const [learnedWords, setLearnedWords] = useState([]);
+  const [totalWords, setTotalWords] = useState(0);
 
   useEffect(() => {
     if (email) {
@@ -19,6 +20,7 @@ const YourWordList = () => {
         const querySnapshot = await getDocs(q);
         const words = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLearnedWords(words);
+        setTotalWords(words.length); // Update total words count
       };
       fetchLearnedWords();
     }
@@ -27,11 +29,13 @@ const YourWordList = () => {
   const handleUnknownClick = (wordId) => {
     dispatch(markWordAsUnknown({ wordId }));
     setLearnedWords(learnedWords.filter(word => word.id !== wordId));
+    setTotalWords(totalWords - 1); // Update total words count
   };
 
   return (
     <div className="your-word-list-container">
       <h1>Your Word List</h1>
+      <p className="total-words">Total words learned: {totalWords}</p> {/* Display total words count */}
       {learnedWords.length === 0 ? (
         <p className="no-words">No words learned yet</p>
       ) : (
