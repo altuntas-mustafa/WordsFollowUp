@@ -1,7 +1,9 @@
 // src/components/Spreken.js
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, arrayUnion, doc, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../features/userSlice';
 import './Spreken.css';
 
 const Spreken = () => {
@@ -9,11 +11,13 @@ const Spreken = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [showAnswers, setShowAnswers] = useState(false);
+  const email = useSelector(selectUser);
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const querySnapshot = await getDocs(collection(db, 'spoken_documents'));
-      const questionsList = querySnapshot.docs.map(doc => doc.data());
+      const q = query(collection(db, 'spoken_documents'), where('knownBy', 'not-in', [email]));
+      const querySnapshot = await getDocs(q);
+      const questionsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setQuestions(questionsList);
       if (questionsList.length > 0) {
         setCurrentIndex(0);
@@ -21,7 +25,7 @@ const Spreken = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [email]);
 
   const handleCheckAnswer = () => {
     setShowAnswers(true);
@@ -31,6 +35,15 @@ const Spreken = () => {
     setShowAnswers(false);
     setUserAnswer('');
     setCurrentIndex((prevIndex) => (prevIndex + 1) % questions.length);
+  };
+
+  const handleMarkAsKnown = async () => {
+    const currentQuestion = questions[currentIndex];
+    const questionRef = doc(db, 'spoken_documents', currentQuestion.id);
+    await updateDoc(questionRef, {
+      knownBy: arrayUnion(email)
+    });
+    handleNextQuestion();
   };
 
   const currentQuestion = questions[currentIndex];
@@ -58,6 +71,7 @@ const Spreken = () => {
                   <li key={index}>{answer}</li>
                 ))}
               </ul>
+              <button onClick={handleMarkAsKnown} className="next-button">Ik weet dit</button>
               <button onClick={handleNextQuestion} className="next-button">Volgende</button>
             </div>
           )}

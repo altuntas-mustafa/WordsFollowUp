@@ -21,6 +21,7 @@ const Navbar = () => {
         <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
         <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
         <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>
+        <li className="navbar-item"><Link to="/spreken-known">Bekende Vragen</Link></li>
         <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
       </ul>
     </nav>
