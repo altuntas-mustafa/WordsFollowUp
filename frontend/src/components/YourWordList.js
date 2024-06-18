@@ -1,30 +1,34 @@
 // src/components/YourWordList.js
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
 import { selectUser } from '../features/userSlice';
-import { fetchWords, markWordAsUnknown, selectLearnedWords } from '../features/wordsSlice';
+import { selectLanguage } from '../features/languageSlice';
 import './YourWordList.css';
 
 const YourWordList = () => {
-  const dispatch = useDispatch();
   const email = useSelector(selectUser);
-  const learnedWords = useSelector((state) => selectLearnedWords(state, email));
-  const status = useSelector((state) => state.words.status);
+  const language = useSelector(selectLanguage);
+  const [learnedWords, setLearnedWords] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchWords());
-  }, [dispatch]);
-
-  const handleUnknownClick = (wordId) => {
-    dispatch(markWordAsUnknown({ email, wordId }));
-  };
+    if (email) {
+      const fetchLearnedWords = async () => {
+        const collectionName = language === 'turkish' ? 'words' : 'words-english';
+        const q = query(collection(db, collectionName), where('learnedBy', 'array-contains', email));
+        const querySnapshot = await getDocs(q);
+        const words = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setLearnedWords(words);
+      };
+      fetchLearnedWords();
+    }
+  }, [email, language]);
 
   return (
     <div className="your-word-list-container">
       <h1>Your Word List</h1>
-      <p className="total-words">Total words learned: {learnedWords.length}</p> {/* Display total words count */}
-      {status === 'loading' && <p className="loading">Loading...</p>}
-      {status === 'failed' && <p className="error">Failed to load words.</p>}
+      <p className="total-words">Total learned words: {learnedWords.length}</p> {/* Display total learned words count */}
       {learnedWords.length === 0 ? (
         <p className="no-words">No words learned yet</p>
       ) : (
@@ -36,26 +40,25 @@ const YourWordList = () => {
                 <span className="dutch">{word.Nederlands}</span>
               </div>
               <div className="word-section">
-                <span className="label">Turkish:</span>
-                <span className="turkish">{word.Turks}</span>
+                <span className="label">{language === 'turkish' ? 'Turkish' : 'English'}:</span>
+                <span className={language === 'turkish' ? 'turkish' : 'english'}>
+                  {language === 'turkish' ? word.Turks : word.Engels}
+                </span>
               </div>
               <div className="word-section">
                 <span className="label">Hoe te lezen:</span>
                 <span className="dutch">{word.HoeTeLezen}</span>
               </div>
               <div className="word-section">
-                <span className="label">Okunuş:</span>
-                <span className="turkish">{word.Okunus}</span>
-              </div>
-              <div className="word-section">
                 <span className="label">Example sentence (Dutch):</span>
                 <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
               </div>
               <div className="word-section">
-                <span className="label">Example sentence (Turkish):</span>
-                <span className="turkish">{word.OrnekCumleTurkce}</span>
+                <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : 'English'}):</span>
+                <span className={language === 'turkish' ? 'turkish' : 'english'}>
+                  {language === 'turkish' ? word.OrnekCumleTurkce : word.ExampleSentenceEnglish}
+                </span>
               </div>
-              <button onClick={() => handleUnknownClick(word.id)}>Don't Know</button>
             </li>
           ))}
         </ul>
