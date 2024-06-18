@@ -20,8 +20,10 @@ const Navbar = () => {
         <li className="navbar-item"><Link to="/">Home</Link></li>
         <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
         <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
+        <li className="navbar-item"><Link to="/word-to-learn-english">Word to Learn (Dutch-English)</Link></li> {/* Add new link */}
         <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>
         <li className="navbar-item"><Link to="/spreken-known">Bekende Vragen</Link></li>
+        <li className="navbar-item"><Link to="/flashcards">Flashcards</Link></li>
         <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
       </ul>
     </nav>
