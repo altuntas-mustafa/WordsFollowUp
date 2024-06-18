@@ -11,6 +11,7 @@ import YourWordList from './components/YourWordList';
 import WordToLearn from './components/WordToLearn';
 import Spreken from './components/Spreken';
 import SprekenKnown from './components/SprekenKnown'; // Import the new component
+import Flashcards from './components/Flashcards'; // Import the Flashcards component
 import { setUser, selectUser } from './features/userSlice';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/word-to-learn" element={<WordToLearn />} />
         <Route path="/spreken" element={<Spreken />} />
         <Route path="/spreken-known" element={<SprekenKnown />} /> {/* Add new route */}
+        <Route path="/flashcards" element={<Flashcards />} /> {/* Add Flashcards route */}
       </Routes>
     </Router>
   );
