@@ -8,7 +8,7 @@ const Flashcards = () => {
   const words = location.state?.words || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [direction, setDirection] = useState('dutch-to-turkish');
+  const [direction, setDirection] = useState('dutch-to-turkish'); // Default direction
 
   const handleNext = () => {
     setIsFlipped(false);
@@ -34,6 +34,8 @@ const Flashcards = () => {
         <select id="direction" value={direction} onChange={handleDirectionChange}>
           <option value="dutch-to-turkish">Dutch to Turkish</option>
           <option value="turkish-to-dutch">Turkish to Dutch</option>
+          <option value="dutch-to-english">Dutch to English</option>
+          <option value="english-to-dutch">English to Dutch</option>
         </select>
       </div>
       {words.length === 0 ? (
@@ -72,7 +74,7 @@ const Flashcards = () => {
                   </div>
                 </div>
               </>
-            ) : (
+            ) : direction === 'turkish-to-dutch' ? (
               <>
                 <div className="flashcard-front">
                   <div className="word-section">
@@ -86,6 +88,60 @@ const Flashcards = () => {
                   <div className="word-section">
                     <span className="label">Example sentence (Turkish):</span>
                     <span className="turkish">{currentWord.OrnekCumleTurkce}</span>
+                  </div>
+                </div>
+                <div className="flashcard-back">
+                  <div className="word-section">
+                    <span className="label">Dutch:</span>
+                    <span className="dutch">{currentWord.Nederlands}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Hoe te lezen:</span>
+                    <span className="dutch">{currentWord.HoeTeLezen}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Dutch):</span>
+                    <span className="dutch">{currentWord.Voorbeeldzin_Nederlands}</span>
+                  </div>
+                </div>
+              </>
+            ) : direction === 'dutch-to-english' ? (
+              <>
+                <div className="flashcard-front">
+                  <div className="word-section">
+                    <span className="label">Dutch:</span>
+                    <span className="dutch">{currentWord.Nederlands}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Hoe te lezen:</span>
+                    <span className="dutch">{currentWord.HoeTeLezen}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (Dutch):</span>
+                    <span className="dutch">{currentWord.Voorbeeldzin_Nederlands}</span>
+                  </div>
+                </div>
+                <div className="flashcard-back">
+                  <div className="word-section">
+                    <span className="label">English:</span>
+                    <span className="english">{currentWord.Engels}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (English):</span>
+                    <span className="english">{currentWord.ExampleSentenceEnglish}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flashcard-front">
+                  <div className="word-section">
+                    <span className="label">English:</span>
+                    <span className="english">{currentWord.Engels}</span>
+                  </div>
+                  <div className="word-section">
+                    <span className="label">Example sentence (English):</span>
+                    <span className="english">{currentWord.ExampleSentenceEnglish}</span>
                   </div>
                 </div>
                 <div className="flashcard-back">

@@ -15,6 +15,7 @@ import Spreken from './components/Spreken';
 import SprekenKnown from './components/SprekenKnown';
 import Flashcards from './components/Flashcards';
 import { setUser, selectUser } from './features/userSlice';
+import HomeEnglish from './components/HomeEnglish';
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home-english" element={<HomeEnglish />} />
         <Route path="/your-word-list" element={<YourWordList />} />
         <Route path="/word-to-learn" element={<WordToLearn />} />
         <Route path="/word-to-learn-english" element={<WordToLearnEnglish />} /> {/* Add new route */}

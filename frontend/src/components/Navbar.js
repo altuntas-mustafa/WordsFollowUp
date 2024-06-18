@@ -18,6 +18,7 @@ const Navbar = () => {
     <nav className="navbar">
       <ul className="navbar-list">
         <li className="navbar-item"><Link to="/">Home</Link></li>
+        <li className="navbar-item"><Link to="/home-english">Home (English)</Link></li>
         <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
         <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
         <li className="navbar-item"><Link to="/word-to-learn-english">Word to Learn (Dutch-English)</Link></li> {/* Add new link */}
