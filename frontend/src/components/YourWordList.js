@@ -28,7 +28,7 @@ const YourWordList = () => {
   return (
     <div className="your-word-list-container">
       <h1>Your Word List</h1>
-      <p className="total-words">Total learned words: {learnedWords.length}</p> {/* Display total learned words count */}
+      <p className="total-words">Total learned words: {learnedWords.length}</p>
       {learnedWords.length === 0 ? (
         <p className="no-words">No words learned yet</p>
       ) : (

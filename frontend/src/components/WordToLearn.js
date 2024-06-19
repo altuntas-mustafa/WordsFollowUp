@@ -14,7 +14,7 @@ const WordToLearn = () => {
   const words = useSelector((state) =>
     language === 'turkish' ? selectUnlearnedWords(state, email) : selectUnlearnedWordsEnglish(state, email)
   );
-  const status = useSelector((state) => state.words.status);
+  const status = useSelector((state) => language === 'turkish' ? state.words.status : state.wordsEnglish.status);
 
   useEffect(() => {
     if (language === 'turkish') {

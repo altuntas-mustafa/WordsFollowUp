@@ -1,6 +1,8 @@
 // src/components/Flashcards.js
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectLanguage } from '../features/languageSlice';
 import './Flashcards.css';
 
 const Flashcards = () => {
@@ -8,7 +10,10 @@ const Flashcards = () => {
   const words = location.state?.words || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [direction, setDirection] = useState('dutch-to-turkish'); // Default direction
+  const language = useSelector(selectLanguage); // Get the selected language
+  const [direction, setDirection] = useState(
+    language === 'turkish' ? 'dutch-to-turkish' : 'dutch-to-english'
+  ); // Default direction based on language
 
   const handleNext = () => {
     setIsFlipped(false);
@@ -32,10 +37,17 @@ const Flashcards = () => {
       <div className="direction-select">
         <label htmlFor="direction">Select direction: </label>
         <select id="direction" value={direction} onChange={handleDirectionChange}>
-          <option value="dutch-to-turkish">Dutch to Turkish</option>
-          <option value="turkish-to-dutch">Turkish to Dutch</option>
-          <option value="dutch-to-english">Dutch to English</option>
-          <option value="english-to-dutch">English to Dutch</option>
+          {language === 'turkish' ? (
+            <>
+              <option value="dutch-to-turkish">Dutch to Turkish</option>
+              <option value="turkish-to-dutch">Turkish to Dutch</option>
+            </>
+          ) : (
+            <>
+              <option value="dutch-to-english">Dutch to English</option>
+              <option value="english-to-dutch">English to Dutch</option>
+            </>
+          )}
         </select>
       </div>
       {words.length === 0 ? (

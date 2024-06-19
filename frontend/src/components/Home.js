@@ -12,11 +12,15 @@ const Home = () => {
   const dispatch = useDispatch();
   const email = useSelector(selectUser);
   const language = useSelector(selectLanguage);
+  const [words, setWords] = useState([]);
+  
+  const status = useSelector((state) =>
+    language === 'turkish' ? state.words.status : state.wordsEnglish.status
+  );
+
   const allUnlearnedWords = useSelector((state) =>
     language === 'turkish' ? selectUnlearnedWords(state, email) : selectUnlearnedWordsEnglish(state, email)
   );
-  const [words, setWords] = useState([]);
-  const status = useSelector((state) => state.words.status);
 
   useEffect(() => {
     if (language === 'turkish') {
@@ -27,10 +31,10 @@ const Home = () => {
   }, [dispatch, language]);
 
   useEffect(() => {
-    if (allUnlearnedWords.length > 0) {
+    if (status === 'success' && words.length === 0) {
       setWords(allUnlearnedWords.slice(0, 10));
     }
-  }, [allUnlearnedWords]);
+  }, [status, allUnlearnedWords, words.length]);
 
   return (
     <div className="home-container">
