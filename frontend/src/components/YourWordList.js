@@ -1,13 +1,16 @@
 // src/components/YourWordList.js
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { selectUser } from '../features/userSlice';
 import { selectLanguage } from '../features/languageSlice';
+import { markWordAsUnknown } from '../features/wordsSlice';
+import { markWordAsUnknownEnglish } from '../features/wordsEnglishSlice';
 import './YourWordList.css';
 
 const YourWordList = () => {
+  const dispatch = useDispatch();
   const email = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const [learnedWords, setLearnedWords] = useState([]);
@@ -24,6 +27,15 @@ const YourWordList = () => {
       fetchLearnedWords();
     }
   }, [email, language]);
+
+  const handleUnknownClick = (wordId) => {
+    if (language === 'turkish') {
+      dispatch(markWordAsUnknown({ email, wordId }));
+    } else {
+      dispatch(markWordAsUnknownEnglish({ email, wordId }));
+    }
+    setLearnedWords(learnedWords.filter(word => word.id !== wordId));
+  };
 
   return (
     <div className="your-word-list-container">
@@ -59,6 +71,7 @@ const YourWordList = () => {
                   {language === 'turkish' ? word.OrnekCumleTurkce : word.ExampleSentenceEnglish}
                 </span>
               </div>
+              <button onClick={() => handleUnknownClick(word.id)}>I don't know this</button>
             </li>
           ))}
         </ul>
