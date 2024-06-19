@@ -1,4 +1,3 @@
-// src/features/wordsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { db } from '../firebase';
 import { collection, getDocs, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';

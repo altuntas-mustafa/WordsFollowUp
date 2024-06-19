@@ -1,11 +1,15 @@
-// src/features/languageSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = localStorage.getItem('language') || 'turkish';
 
 const languageSlice = createSlice({
   name: 'language',
-  initialState: 'turkish', // default to Turkish
+  initialState,
   reducers: {
-    setLanguage: (state, action) => action.payload,
+    setLanguage: (state, action) => {
+      localStorage.setItem('language', action.payload);
+      return action.payload;
+    },
   },
 });
 

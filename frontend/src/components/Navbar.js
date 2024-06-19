@@ -1,6 +1,5 @@
-// src/components/Navbar.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOutUser } from '../firebase';
 import { clearUser } from '../features/userSlice';
@@ -12,6 +11,7 @@ const Navbar = () => {
   const language = useSelector(selectLanguage);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOutUser();
@@ -21,6 +21,7 @@ const Navbar = () => {
   const handleLanguageSelect = (language) => {
     dispatch(setLanguage(language));
     setShowDropdown(false);
+    navigate('/word-to-learn');
   };
 
   const toggleDropdown = () => {
@@ -68,7 +69,7 @@ const Navbar = () => {
         </div>
         <div className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="navbar-list">
-            <li className="navbar-item"><Link to="/home">Home</Link></li>
+            <li className="navbar-item"><Link to="/">Home</Link></li>
             <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
             <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
             <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>

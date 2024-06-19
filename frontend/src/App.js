@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +11,6 @@ import WordToLearn from './components/WordToLearn';
 import Spreken from './components/Spreken';
 import SprekenKnown from './components/SprekenKnown';
 import Flashcards from './components/Flashcards';
-import LanguageSelection from './components/LanguageSelection'; // Import the LanguageSelection component
 import { setUser, selectUser } from './features/userSlice';
 
 function App() {
@@ -39,8 +37,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<LanguageSelection />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/your-word-list" element={<YourWordList />} />
         <Route path="/word-to-learn" element={<WordToLearn />} />
         <Route path="/spreken" element={<Spreken />} />

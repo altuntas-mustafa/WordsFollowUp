@@ -1,8 +1,9 @@
-// src/features/wordsEnglishSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { db } from '../firebase';
-import { collection, getDocs, updateDoc, doc, arrayUnion } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { createSelector } from 'reselect';
 
+// Async thunks
 export const fetchWordsEnglish = createAsyncThunk('wordsEnglish/fetchWords', async () => {
   const querySnapshot = await getDocs(collection(db, 'words-english'));
   const words = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -15,12 +16,13 @@ export const markWordAsLearnedEnglish = createAsyncThunk('wordsEnglish/markWordA
   return { wordId, email };
 });
 
-export const markWordAsUnknownEnglish = createAsyncThunk('wordsEnglish/markWordAsUnknown', async ({ wordId }) => {
+export const markWordAsUnknownEnglish = createAsyncThunk('wordsEnglish/markWordAsUnknown', async ({ email, wordId }) => {
   const wordRef = doc(db, 'words-english', wordId);
-  await updateDoc(wordRef, { learnedBy: '' });
-  return wordId;
+  await updateDoc(wordRef, { learnedBy: arrayRemove(email) });
+  return { wordId, email };
 });
 
+// Slice
 const wordsEnglishSlice = createSlice({
   name: 'wordsEnglish',
   initialState: {
@@ -48,19 +50,21 @@ const wordsEnglishSlice = createSlice({
         }
       })
       .addCase(markWordAsUnknownEnglish.fulfilled, (state, action) => {
-        const wordId = action.payload;
+        const { wordId, email } = action.payload;
         const word = state.words.find(word => word.id === wordId);
         if (word) {
-          word.learnedBy = [];
+          word.learnedBy = word.learnedBy.filter(e => e !== email);
         }
       });
   },
 });
 
+// Selectors
 export const selectWordsEnglish = (state) => state.wordsEnglish.words;
-export const selectUnlearnedWordsEnglish = (state, email) =>
-  state.wordsEnglish.words.filter(word => !word.learnedBy.includes(email));
-export const selectLearnedWordsEnglish = (state, email) =>
-  state.wordsEnglish.words.filter(word => word.learnedBy.includes(email));
+export const selectUnlearnedWordsEnglish = createSelector(
+  [selectWordsEnglish, (state, email) => email],
+  (words, email) => words.filter(word => !word.learnedBy.includes(email))
+);
 
+// Exports
 export default wordsEnglishSlice.reducer;

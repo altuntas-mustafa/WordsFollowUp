@@ -1,4 +1,3 @@
-// src/components/Home.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,7 @@ const Home = () => {
   const email = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const [words, setWords] = useState([]);
-  
+
   const status = useSelector((state) =>
     language === 'turkish' ? state.words.status : state.wordsEnglish.status
   );
@@ -23,6 +22,7 @@ const Home = () => {
   );
 
   useEffect(() => {
+    setWords([]); // Clear the state when language changes
     if (language === 'turkish') {
       dispatch(fetchWords());
     } else {
@@ -31,10 +31,10 @@ const Home = () => {
   }, [dispatch, language]);
 
   useEffect(() => {
-    if (status === 'success' && words.length === 0) {
+    if (status === 'success' && allUnlearnedWords.length > 0) {
       setWords(allUnlearnedWords.slice(0, 10));
     }
-  }, [status, allUnlearnedWords, words.length]);
+  }, [status, allUnlearnedWords]);
 
   return (
     <div className="home-container">
