@@ -16,20 +16,32 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOutUser();
     dispatch(clearUser());
+    setIsMenuOpen(false); // Close the menu
   };
 
   const handleLanguageSelect = (language) => {
     dispatch(setLanguage(language));
     setShowDropdown(false);
+    setIsMenuOpen(false); // Close the menu
     navigate('/word-to-learn');
   };
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
+    if (showDropdown === false) {
+      setIsMenuOpen(false); // Close the hamburger menu if opening the dropdown
+    }
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    if (isMenuOpen === false) {
+      setShowDropdown(false); // Close the dropdown if opening the hamburger menu
+    }
+  };
+
+  const handleMenuItemClick = () => {
+    setIsMenuOpen(false); // Close the menu
   };
 
   return (
@@ -69,11 +81,11 @@ const Navbar = () => {
         </div>
         <div className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="navbar-list">
-            <li className="navbar-item"><Link to="/">Home</Link></li>
-            <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
-            <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
-            <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>
-            <li className="navbar-item"><Link to="/spreken-known">Bekende Vragen</Link></li>
+            <li className="navbar-item"><Link to="/" onClick={handleMenuItemClick}>Home</Link></li>
+            <li className="navbar-item"><Link to="/word-to-learn" onClick={handleMenuItemClick}>Word to Learn</Link></li>
+            <li className="navbar-item"><Link to="/your-word-list" onClick={handleMenuItemClick}>Your Word List</Link></li>
+            <li className="navbar-item"><Link to="/spreken" onClick={handleMenuItemClick}>Spreken</Link></li>
+            <li className="navbar-item"><Link to="/spreken-known" onClick={handleMenuItemClick}>Bekende Vragen</Link></li>
             <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
           </ul>
         </div>
