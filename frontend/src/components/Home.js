@@ -1,3 +1,4 @@
+// src/components/Home.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { selectUser } from '../features/userSlice';
 import { selectLanguage } from '../features/languageSlice';
 import { fetchWords, selectUnlearnedWords } from '../features/wordsSlice';
 import { fetchWordsEnglish, selectUnlearnedWordsEnglish } from '../features/wordsEnglishSlice';
+import { fetchWordsSpanish, selectUnlearnedWordsSpanish } from '../features/wordsSpanishSlice'; // Import Spanish words slice
 import './Home.css';
 
 const Home = () => {
@@ -14,27 +16,32 @@ const Home = () => {
   const [words, setWords] = useState([]);
 
   const status = useSelector((state) =>
-    language === 'turkish' ? state.words.status : state.wordsEnglish.status
+    language === 'turkish' ? state.words.status :
+    language === 'english' ? state.wordsEnglish.status :
+    state.wordsSpanish.status // Add Spanish status
   );
 
   const allUnlearnedWords = useSelector((state) =>
-    language === 'turkish' ? selectUnlearnedWords(state, email) : selectUnlearnedWordsEnglish(state, email)
+    language === 'turkish' ? selectUnlearnedWords(state, email) :
+    language === 'english' ? selectUnlearnedWordsEnglish(state, email) :
+    selectUnlearnedWordsSpanish(state, email) // Add Spanish words selection
   );
 
   useEffect(() => {
-    setWords([]); // Clear the state when language changes
     if (language === 'turkish') {
       dispatch(fetchWords());
-    } else {
+    } else if (language === 'english') {
       dispatch(fetchWordsEnglish());
+    } else if (language === 'spanish') {
+      dispatch(fetchWordsSpanish());
     }
   }, [dispatch, language]);
 
   useEffect(() => {
-    if (status === 'success' && allUnlearnedWords.length > 0) {
+    if (status === 'success' && words.length === 0 && allUnlearnedWords.length > 0) {
       setWords(allUnlearnedWords.slice(0, 10));
     }
-  }, [status, allUnlearnedWords]);
+  }, [status, allUnlearnedWords, words.length]);
 
   return (
     <div className="home-container">
@@ -61,9 +68,9 @@ const Home = () => {
                     <span className="dutch">{word.Nederlands}</span>
                   </div>
                   <div className="word-section">
-                    <span className="label">{language === 'turkish' ? 'Turkish' : 'English'}:</span>
-                    <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                      {language === 'turkish' ? word.Turks : word.Engels}
+                    <span className="label">{language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}:</span>
+                    <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
+                      {language === 'turkish' ? word.Turks : language === 'english' ? word.Engels : word.Spanish}
                     </span>
                   </div>
                   <div className="word-section">
@@ -75,9 +82,9 @@ const Home = () => {
                     <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
                   </div>
                   <div className="word-section">
-                    <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : 'English'}):</span>
-                    <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                      {language === 'turkish' ? word.OrnekCumleTurkce : word.ExampleSentenceEnglish}
+                    <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}):</span>
+                    <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
+                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.ExampleSentenceEnglish : word.ExampleSentenceSpanish}
                     </span>
                   </div>
                 </li>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOutUser } from '../firebase';
 import { clearUser } from '../features/userSlice';
@@ -11,37 +11,23 @@ const Navbar = () => {
   const language = useSelector(selectLanguage);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOutUser();
     dispatch(clearUser());
-    setIsMenuOpen(false); // Close the menu
   };
 
   const handleLanguageSelect = (language) => {
     dispatch(setLanguage(language));
     setShowDropdown(false);
-    setIsMenuOpen(false); // Close the menu
-    navigate('/word-to-learn');
   };
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
-    if (showDropdown === false) {
-      setIsMenuOpen(false); // Close the hamburger menu if opening the dropdown
-    }
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    if (isMenuOpen === false) {
-      setShowDropdown(false); // Close the dropdown if opening the hamburger menu
-    }
-  };
-
-  const handleMenuItemClick = () => {
-    setIsMenuOpen(false); // Close the menu
   };
 
   return (
@@ -52,11 +38,13 @@ const Navbar = () => {
             <img
               src={language === 'turkish'
                 ? "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg"
-                : "https://static.vecteezy.com/system/resources/previews/000/388/356/original/illustration-of-uk-flag-vector.jpg"}
+                : language === 'english'
+                ? "https://static.vecteezy.com/system/resources/previews/000/388/356/original/illustration-of-uk-flag-vector.jpg"
+                : "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg"}
               alt="Flag"
               className="flag-icon"
             />
-            {language === 'turkish' ? 'Turkish' : 'English'}
+            {language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}
           </button>
           {showDropdown && (
             <div className="dropdown-content">
@@ -76,16 +64,24 @@ const Navbar = () => {
                 />
                 English
               </button>
+              <button onClick={() => handleLanguageSelect('spanish')} className="dropdown-item">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg"
+                  alt="Spanish Flag"
+                  className="flag-icon"
+                />
+                Spanish
+              </button>
             </div>
           )}
         </div>
         <div className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="navbar-list">
-            <li className="navbar-item"><Link to="/" onClick={handleMenuItemClick}>Home</Link></li>
-            <li className="navbar-item"><Link to="/word-to-learn" onClick={handleMenuItemClick}>Word to Learn</Link></li>
-            <li className="navbar-item"><Link to="/your-word-list" onClick={handleMenuItemClick}>Your Word List</Link></li>
-            <li className="navbar-item"><Link to="/spreken" onClick={handleMenuItemClick}>Spreken</Link></li>
-            <li className="navbar-item"><Link to="/spreken-known" onClick={handleMenuItemClick}>Bekende Vragen</Link></li>
+            <li className="navbar-item"><Link to="/">Home</Link></li>
+            <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
+            <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
+            <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>
+            <li className="navbar-item"><Link to="/spreken-known">Bekende Vragen</Link></li>
             <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
           </ul>
         </div>

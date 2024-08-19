@@ -5,6 +5,7 @@ import { selectUser } from '../features/userSlice';
 import { selectLanguage } from '../features/languageSlice';
 import { fetchWords, markWordAsLearned, selectUnlearnedWords } from '../features/wordsSlice';
 import { fetchWordsEnglish, markWordAsLearnedEnglish, selectUnlearnedWordsEnglish } from '../features/wordsEnglishSlice';
+import { fetchWordsSpanish, markWordAsLearnedSpanish, selectUnlearnedWordsSpanish } from '../features/wordsSpanishSlice'; // Import Spanish words slice
 import './WordToLearn.css';
 
 const WordToLearn = () => {
@@ -12,23 +13,33 @@ const WordToLearn = () => {
   const email = useSelector(selectUser);
   const language = useSelector(selectLanguage);
   const words = useSelector((state) =>
-    language === 'turkish' ? selectUnlearnedWords(state, email) : selectUnlearnedWordsEnglish(state, email)
+    language === 'turkish' ? selectUnlearnedWords(state, email) :
+    language === 'english' ? selectUnlearnedWordsEnglish(state, email) :
+    selectUnlearnedWordsSpanish(state, email) // Add Spanish words selection
   );
-  const status = useSelector((state) => language === 'turkish' ? state.words.status : state.wordsEnglish.status);
+  const status = useSelector((state) =>
+    language === 'turkish' ? state.words.status :
+    language === 'english' ? state.wordsEnglish.status :
+    state.wordsSpanish.status // Add Spanish status
+  );
 
   useEffect(() => {
     if (language === 'turkish') {
       dispatch(fetchWords());
-    } else {
+    } else if (language === 'english') {
       dispatch(fetchWordsEnglish());
+    } else if (language === 'spanish') {
+      dispatch(fetchWordsSpanish());
     }
   }, [dispatch, language]);
 
   const handleLearnedClick = (wordId) => {
     if (language === 'turkish') {
       dispatch(markWordAsLearned({ email, wordId }));
-    } else {
+    } else if (language === 'english') {
       dispatch(markWordAsLearnedEnglish({ email, wordId }));
+    } else if (language === 'spanish') {
+      dispatch(markWordAsLearnedSpanish({ email, wordId }));
     }
   };
 
@@ -51,9 +62,9 @@ const WordToLearn = () => {
                     <span className="dutch">{word.Nederlands}</span>
                   </div>
                   <div className="word-section">
-                    <span className="label">{language === 'turkish' ? 'Turkish' : 'English'}:</span>
-                    <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                      {language === 'turkish' ? word.Turks : word.Engels}
+                    <span className="label">{language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}:</span>
+                    <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
+                      {language === 'turkish' ? word.Turks : language === 'english' ? word.Engels : word.Spanish}
                     </span>
                   </div>
                   <div className="word-section">
@@ -65,9 +76,9 @@ const WordToLearn = () => {
                     <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
                   </div>
                   <div className="word-section">
-                    <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : 'English'}):</span>
-                    <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                      {language === 'turkish' ? word.OrnekCumleTurkce : word.ExampleSentenceEnglish}
+                    <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}):</span>
+                    <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
+                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.ExampleSentenceEnglish : word.ExampleSentenceSpanish}
                     </span>
                   </div>
                   <button onClick={() => handleLearnedClick(word.id)}>I know this</button>

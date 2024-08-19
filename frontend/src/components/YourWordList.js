@@ -1,3 +1,4 @@
+// src/components/YourWordList.js
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -5,7 +6,8 @@ import { db } from '../firebase';
 import { selectUser } from '../features/userSlice';
 import { selectLanguage } from '../features/languageSlice';
 import { markWordAsUnknown } from '../features/wordsSlice';
-import { markWordAsUnknownEnglish } from '../features/wordsEnglishSlice';
+import { markWordAsUnknownEnglish } from '../features/wordsEnglishSlice'; // Corrected import
+import { markWordAsUnknownSpanish } from '../features/wordsSpanishSlice'; // Corrected import
 import './YourWordList.css';
 
 const YourWordList = () => {
@@ -17,23 +19,38 @@ const YourWordList = () => {
   useEffect(() => {
     if (email) {
       const fetchLearnedWords = async () => {
-        const collectionName = language === 'turkish' ? 'words' : 'words-english';
-        const q = query(collection(db, collectionName), where('learnedBy', 'array-contains', email));
+        const collectionName =
+          language === 'turkish'
+            ? 'words'
+            : language === 'english'
+            ? 'words-english'
+            : 'words-spanish';
+        const q = query(
+          collection(db, collectionName),
+          where('learnedBy', 'array-contains', email)
+        );
         const querySnapshot = await getDocs(q);
-        const words = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const words = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setLearnedWords(words);
       };
       fetchLearnedWords();
     }
   }, [email, language]);
 
-  const handleMarkAsUnknown = (wordId) => {
+  const handleDontKnowClick = (wordId) => {
     if (language === 'turkish') {
       dispatch(markWordAsUnknown({ email, wordId }));
-    } else {
+    } else if (language === 'english') {
       dispatch(markWordAsUnknownEnglish({ email, wordId }));
+    } else if (language === 'spanish') {
+      dispatch(markWordAsUnknownSpanish({ email, wordId }));
     }
-    setLearnedWords(prevWords => prevWords.filter(word => word.id !== wordId));
+
+    // Remove the word from the local state
+    setLearnedWords(learnedWords.filter((word) => word.id !== wordId));
   };
 
   return (
@@ -51,9 +68,28 @@ const YourWordList = () => {
                 <span className="dutch">{word.Nederlands}</span>
               </div>
               <div className="word-section">
-                <span className="label">{language === 'turkish' ? 'Turkish' : 'English'}:</span>
-                <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                  {language === 'turkish' ? word.Turks : word.Engels}
+                <span className="label">
+                  {language === 'turkish'
+                    ? 'Turkish'
+                    : language === 'english'
+                    ? 'English'
+                    : 'Spanish'}
+                  :
+                </span>
+                <span
+                  className={
+                    language === 'turkish'
+                      ? 'turkish'
+                      : language === 'english'
+                      ? 'english'
+                      : 'spanish'
+                  }
+                >
+                  {language === 'turkish'
+                    ? word.Turks
+                    : language === 'english'
+                    ? word.Engels
+                    : word.Spanish}
                 </span>
               </div>
               <div className="word-section">
@@ -65,12 +101,37 @@ const YourWordList = () => {
                 <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
               </div>
               <div className="word-section">
-                <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : 'English'}):</span>
-                <span className={language === 'turkish' ? 'turkish' : 'english'}>
-                  {language === 'turkish' ? word.OrnekCumleTurkce : word.ExampleSentenceEnglish}
+                <span className="label">
+                  Example sentence (
+                  {language === 'turkish'
+                    ? 'Turkish'
+                    : language === 'english'
+                    ? 'English'
+                    : 'Spanish'}
+                  ):
+                </span>
+                <span
+                  className={
+                    language === 'turkish'
+                      ? 'turkish'
+                      : language === 'english'
+                      ? 'english'
+                      : 'spanish'
+                  }
+                >
+                  {language === 'turkish'
+                    ? word.OrnekCumleTurkce
+                    : language === 'english'
+                    ? word.ExampleSentenceEnglish
+                    : word.ExampleSentenceSpanish}
                 </span>
               </div>
-              <button onClick={() => handleMarkAsUnknown(word.id)}>I don't know this</button>
+              <button
+                onClick={() => handleDontKnowClick(word.id)}
+                className="dont-know-button"
+              >
+                I don't know this
+              </button>
             </li>
           ))}
         </ul>
