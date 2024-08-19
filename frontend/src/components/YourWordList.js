@@ -1,14 +1,13 @@
-// src/components/YourWordList.js
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase';
-import { selectUser } from '../features/userSlice';
-import { selectLanguage } from '../features/languageSlice';
-import { markWordAsUnknown } from '../features/wordsSlice';
-import { markWordAsUnknownEnglish } from '../features/wordsEnglishSlice'; // Corrected import
-import { markWordAsUnknownSpanish } from '../features/wordsSpanishSlice'; // Corrected import
-import './YourWordList.css';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
+import { selectUser } from "../features/userSlice";
+import { selectLanguage } from "../features/languageSlice";
+import { markWordAsUnknown } from "../features/wordsSlice";
+import { markWordAsUnknownEnglish } from "../features/wordsEnglishSlice";
+import { markWordAsUnknownSpanish } from "../features/wordsSpanishSlice";
+import "./YourWordList.css";
 
 const YourWordList = () => {
   const email = useSelector(selectUser);
@@ -20,14 +19,14 @@ const YourWordList = () => {
     if (email) {
       const fetchLearnedWords = async () => {
         const collectionName =
-          language === 'turkish'
-            ? 'words'
-            : language === 'english'
-            ? 'words-english'
-            : 'words-spanish';
+          language === "turkish"
+            ? "words"
+            : language === "english"
+            ? "words-english"
+            : "words-spanish";
         const q = query(
           collection(db, collectionName),
-          where('learnedBy', 'array-contains', email)
+          where("learnedBy", "array-contains", email)
         );
         const querySnapshot = await getDocs(q);
         const words = querySnapshot.docs.map((doc) => ({
@@ -41,11 +40,11 @@ const YourWordList = () => {
   }, [email, language]);
 
   const handleDontKnowClick = (wordId) => {
-    if (language === 'turkish') {
+    if (language === "turkish") {
       dispatch(markWordAsUnknown({ email, wordId }));
-    } else if (language === 'english') {
+    } else if (language === "english") {
       dispatch(markWordAsUnknownEnglish({ email, wordId }));
-    } else if (language === 'spanish') {
+    } else if (language === "spanish") {
       dispatch(markWordAsUnknownSpanish({ email, wordId }));
     }
 
@@ -69,25 +68,25 @@ const YourWordList = () => {
               </div>
               <div className="word-section">
                 <span className="label">
-                  {language === 'turkish'
-                    ? 'Turkish'
-                    : language === 'english'
-                    ? 'English'
-                    : 'Spanish'}
+                  {language === "turkish"
+                    ? "Turkish"
+                    : language === "english"
+                    ? "English"
+                    : "Spanish"}
                   :
                 </span>
                 <span
                   className={
-                    language === 'turkish'
-                      ? 'turkish'
-                      : language === 'english'
-                      ? 'english'
-                      : 'spanish'
+                    language === "turkish"
+                      ? "turkish"
+                      : language === "english"
+                      ? "english"
+                      : "spanish"
                   }
                 >
-                  {language === 'turkish'
+                  {language === "turkish"
                     ? word.Turks
-                    : language === 'english'
+                    : language === "english"
                     ? word.Engels
                     : word.Spanish}
                 </span>
@@ -97,33 +96,47 @@ const YourWordList = () => {
                 <span className="dutch">{word.HoeTeLezen}</span>
               </div>
               <div className="word-section">
+                {language === "spanish" ? (
+                  <>
+                    <span className="label">Cómo leer:</span>
+                    <span className="spanish">{word.Cómo_leer}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="label">Hoe te lezen:</span>
+                    <span className="dutch">{word.HoeTeLezen}</span>
+                  </>
+                )}
+              </div>
+
+              <div className="word-section">
                 <span className="label">Example sentence (Dutch):</span>
                 <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
               </div>
               <div className="word-section">
                 <span className="label">
                   Example sentence (
-                  {language === 'turkish'
-                    ? 'Turkish'
-                    : language === 'english'
-                    ? 'English'
-                    : 'Spanish'}
+                  {language === "turkish"
+                    ? "Turkish"
+                    : language === "english"
+                    ? "English"
+                    : "Spanish"}
                   ):
                 </span>
                 <span
                   className={
-                    language === 'turkish'
-                      ? 'turkish'
-                      : language === 'english'
-                      ? 'english'
-                      : 'spanish'
+                    language === "turkish"
+                      ? "turkish"
+                      : language === "english"
+                      ? "english"
+                      : "spanish"
                   }
                 >
-                  {language === 'turkish'
+                  {language === "turkish"
                     ? word.OrnekCumleTurkce
-                    : language === 'english'
+                    : language === "english"
                     ? word.ExampleSentenceEnglish
-                    : word.ExampleSentenceSpanish}
+                    : word.Ejemplo_de_oración_Español}
                 </span>
               </div>
               <button

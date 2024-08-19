@@ -1,4 +1,3 @@
-// src/components/Home.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,7 +5,7 @@ import { selectUser } from '../features/userSlice';
 import { selectLanguage } from '../features/languageSlice';
 import { fetchWords, selectUnlearnedWords } from '../features/wordsSlice';
 import { fetchWordsEnglish, selectUnlearnedWordsEnglish } from '../features/wordsEnglishSlice';
-import { fetchWordsSpanish, selectUnlearnedWordsSpanish } from '../features/wordsSpanishSlice'; // Import Spanish words slice
+import { fetchWordsSpanish, selectUnlearnedWordsSpanish } from '../features/wordsSpanishSlice';
 import './Home.css';
 
 const Home = () => {
@@ -18,13 +17,13 @@ const Home = () => {
   const status = useSelector((state) =>
     language === 'turkish' ? state.words.status :
     language === 'english' ? state.wordsEnglish.status :
-    state.wordsSpanish.status // Add Spanish status
+    state.wordsSpanish.status
   );
 
   const allUnlearnedWords = useSelector((state) =>
     language === 'turkish' ? selectUnlearnedWords(state, email) :
     language === 'english' ? selectUnlearnedWordsEnglish(state, email) :
-    selectUnlearnedWordsSpanish(state, email) // Add Spanish words selection
+    selectUnlearnedWordsSpanish(state, email)
   );
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const Home = () => {
       dispatch(fetchWords());
     } else if (language === 'english') {
       dispatch(fetchWordsEnglish());
-    } else if (language === 'spanish') {
+    } else {
       dispatch(fetchWordsSpanish());
     }
   }, [dispatch, language]);
@@ -78,13 +77,17 @@ const Home = () => {
                     <span className="dutch">{word.HoeTeLezen}</span>
                   </div>
                   <div className="word-section">
+                    <span className="label">{language === 'spanish' ? 'Cómo leer' : ''}:</span>
+                    <span className="spanish">{language === 'spanish' ? word.Cómo_leer : ''}</span>
+                  </div>
+                  <div className="word-section">
                     <span className="label">Example sentence (Dutch):</span>
                     <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
                   </div>
                   <div className="word-section">
                     <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}):</span>
                     <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
-                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.ExampleSentenceEnglish : word.ExampleSentenceSpanish}
+                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.ExampleSentenceEnglish : word.Ejemplo_de_oración_Español}
                     </span>
                   </div>
                 </li>
