@@ -101,10 +101,16 @@ const YourWordList = () => {
                     <span className="label">Cómo leer:</span>
                     <span className="spanish">{word.Cómo_leer}</span>
                   </>
-                ) : (
+                ) : language === "turkish" ? (
                   <>
-                    <span className="label">Hoe te lezen:</span>
-                    <span className="dutch">{word.HoeTeLezen}</span>
+                    <span className="label">Okunusu:</span>
+                    <span className="turkish">{word.Okunus}</span>
+                  </>
+                ):
+                (
+                  <>
+                    <span className="label">   </span>
+                    <span className="english">{word.howToRead}</span>
                   </>
                 )}
               </div>
