@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOutUser } from '../firebase';
 import { clearUser } from '../features/userSlice';
@@ -8,6 +8,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const language = useSelector(selectLanguage);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,11 +16,14 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOutUser();
     dispatch(clearUser());
+    navigate('/');  // Navigate to home after sign out
   };
 
-  const handleLanguageSelect = (language) => {
-    dispatch(setLanguage(language));
+  const handleLanguageSelect = (selectedLanguage) => {
+    dispatch(setLanguage(selectedLanguage));
     setShowDropdown(false);
+    setIsMenuOpen(false);  // Close the hamburger menu when a language is selected
+    navigate('/');  // Navigate to home after changing language
   };
 
   const toggleDropdown = () => {
@@ -77,11 +81,11 @@ const Navbar = () => {
         </div>
         <div className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="navbar-list">
-            <li className="navbar-item"><Link to="/">Home</Link></li>
-            <li className="navbar-item"><Link to="/word-to-learn">Word to Learn</Link></li>
-            <li className="navbar-item"><Link to="/your-word-list">Your Word List</Link></li>
-            <li className="navbar-item"><Link to="/spreken">Spreken</Link></li>
-            <li className="navbar-item"><Link to="/spreken-known">Bekende Vragen</Link></li>
+            <li className="navbar-item"><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+            <li className="navbar-item"><Link to="/word-to-learn" onClick={() => setIsMenuOpen(false)}>Word to Learn</Link></li>
+            <li className="navbar-item"><Link to="/your-word-list" onClick={() => setIsMenuOpen(false)}>Your Word List</Link></li>
+            <li className="navbar-item"><Link to="/spreken" onClick={() => setIsMenuOpen(false)}>Spreken</Link></li>
+            <li className="navbar-item"><Link to="/spreken-known" onClick={() => setIsMenuOpen(false)}>Bekende Vragen</Link></li>
             <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
           </ul>
         </div>
