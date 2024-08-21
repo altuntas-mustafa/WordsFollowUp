@@ -27,6 +27,9 @@ const Home = () => {
   );
 
   useEffect(() => {
+    // Clear the words state when the language changes
+    setWords([]);
+
     if (language === 'turkish') {
       dispatch(fetchWords());
     } else if (language === 'english') {
@@ -37,10 +40,11 @@ const Home = () => {
   }, [dispatch, language]);
 
   useEffect(() => {
-    if (status === 'success' && words.length === 0 && allUnlearnedWords.length > 0) {
+    // Update words when status is 'success' and unlearned words are available
+    if (status === 'success' && allUnlearnedWords.length > 0) {
       setWords(allUnlearnedWords.slice(0, 10));
     }
-  }, [status, allUnlearnedWords, words.length]);
+  }, [status, allUnlearnedWords]);
 
   return (
     <div className="home-container">
@@ -69,17 +73,31 @@ const Home = () => {
                   <div className="word-section">
                     <span className="label">{language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}:</span>
                     <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
-                      {language === 'turkish' ? word.Turks : language === 'english' ? word.Engels : word.Spanish}
+                      {language === 'turkish' ? word.Turks : language === 'english' ? word.English : word.Spanish}
                     </span>
                   </div>
                   <div className="word-section">
                     <span className="label">Hoe te lezen:</span>
                     <span className="dutch">{word.HoeTeLezen}</span>
                   </div>
-                  <div className="word-section">
-                    <span className="label">{language === 'spanish' ? 'Cómo leer' : ''}:</span>
-                    <span className="spanish">{language === 'spanish' ? word.Cómo_leer : ''}</span>
-                  </div>
+                  {language === 'spanish' && (
+                    <div className="word-section">
+                      <span className="label">Cómo leer:</span>
+                      <span className="spanish">{word.Cómo_leer}</span>
+                    </div>
+                  )}
+                  {language === 'turkish' && (
+                    <div className="word-section">
+                      <span className="label">Okunuş:</span>
+                      <span className="turkish">{word.Okunus}</span>
+                    </div>
+                  )}
+                  {language === 'english' && (
+                    <div className="word-section">
+                      <span className="label">How to read:</span>
+                      <span className="english">{word.How_to_read}</span>
+                    </div>
+                  )}
                   <div className="word-section">
                     <span className="label">Example sentence (Dutch):</span>
                     <span className="dutch">{word.Voorbeeldzin_Nederlands}</span>
@@ -87,7 +105,7 @@ const Home = () => {
                   <div className="word-section">
                     <span className="label">Example sentence ({language === 'turkish' ? 'Turkish' : language === 'english' ? 'English' : 'Spanish'}):</span>
                     <span className={language === 'turkish' ? 'turkish' : language === 'english' ? 'english' : 'spanish'}>
-                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.ExampleSentenceEnglish : word.Ejemplo_de_oración_Español}
+                      {language === 'turkish' ? word.OrnekCumleTurkce : language === 'english' ? word.Example_sentence_English : word.Ejemplo_de_oración_Español}
                     </span>
                   </div>
                 </li>
