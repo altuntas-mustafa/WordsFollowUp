@@ -87,7 +87,7 @@ const YourWordList = () => {
                   {language === "turkish"
                     ? word.Turks
                     : language === "english"
-                    ? word.Engels
+                    ? word.English
                     : word.Spanish}
                 </span>
               </div>
@@ -103,14 +103,13 @@ const YourWordList = () => {
                   </>
                 ) : language === "turkish" ? (
                   <>
-                    <span className="label">Okunusu:</span>
+                    <span className="label">Okunuş:</span>
                     <span className="turkish">{word.Okunus}</span>
                   </>
-                ):
-                (
+                ) : (
                   <>
-                    <span className="label">   </span>
-                    <span className="english">{word.howToRead}</span>
+                    <span className="label">How to read:</span>
+                    <span className="english">{word.How_to_read}</span>
                   </>
                 )}
               </div>
@@ -141,7 +140,7 @@ const YourWordList = () => {
                   {language === "turkish"
                     ? word.OrnekCumleTurkce
                     : language === "english"
-                    ? word.ExampleSentenceEnglish
+                    ? word.Example_sentence_English
                     : word.Ejemplo_de_oración_Español}
                 </span>
               </div>

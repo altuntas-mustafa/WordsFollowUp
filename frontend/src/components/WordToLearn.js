@@ -97,7 +97,7 @@ const WordToLearn = () => {
                       {language === "turkish"
                         ? word.Turks
                         : language === "english"
-                        ? word.Engels
+                        ? word.English
                         : word.Spanish}
                     </span>
                   </div>
@@ -111,10 +111,15 @@ const WordToLearn = () => {
                         <span className="label">Cómo leer:</span>
                         <span className="spanish">{word.Cómo_leer}</span>
                       </>
+                    ) : language === "turkish" ? (
+                      <>
+                        <span className="label">Okunuş:</span>
+                        <span className="turkish">{word.Okunus}</span>
+                      </>
                     ) : (
                       <>
-                        <span className="label">Hoe te lezen:</span>
-                        <span className="dutch">{word.HoeTeLezen}</span>
+                        <span className="label">How to read:</span>
+                        <span className="english">{word.How_to_read}</span>
                       </>
                     )}
                   </div>
@@ -147,7 +152,7 @@ const WordToLearn = () => {
                       {language === "turkish"
                         ? word.OrnekCumleTurkce
                         : language === "english"
-                        ? word.ExampleSentenceEnglish
+                        ? word.Example_sentence_English
                         : word.Ejemplo_de_oración_Español}
                     </span>
                   </div>
