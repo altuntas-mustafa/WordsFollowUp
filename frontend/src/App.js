@@ -12,6 +12,8 @@ import Spreken from './components/Spreken';
 import SprekenKnown from './components/SprekenKnown';
 import Flashcards from './components/Flashcards';
 import { setUser, selectUser } from './features/userSlice';
+import DutchGrammar from './components/DutchGrammar';
+import GrammarDetail from './components/GrammarDetail';
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +45,9 @@ function App() {
         <Route path="/spreken" element={<Spreken />} />
         <Route path="/spreken-known" element={<SprekenKnown />} />
         <Route path="/flashcards" element={<Flashcards />} />
+        <Route path="/grammar" element={<DutchGrammar />} />
+        <Route path="/grammar/:id" element={<GrammarDetail />} />
+
       </Routes>
     </Router>
   );

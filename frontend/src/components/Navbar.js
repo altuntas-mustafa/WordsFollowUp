@@ -86,6 +86,7 @@ const Navbar = () => {
             <li className="navbar-item"><Link to="/your-word-list" onClick={() => setIsMenuOpen(false)}>Your Word List</Link></li>
             <li className="navbar-item"><Link to="/spreken" onClick={() => setIsMenuOpen(false)}>Spreken</Link></li>
             <li className="navbar-item"><Link to="/spreken-known" onClick={() => setIsMenuOpen(false)}>Bekende Vragen</Link></li>
+            <li className="navbar-item"><Link to="/grammar" onClick={() => setIsMenuOpen(false)}>Dutch Grammar</Link></li> {/* Added this line */}
             <li className="navbar-item"><button onClick={handleSignOut}>Sign Out</button></li>
           </ul>
         </div>
